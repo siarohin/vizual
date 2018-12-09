@@ -1,0 +1,29 @@
+@import url(./modules/radioButton/style.css);
+@import url(./modules/checkBox/style.css);
+@import url(./modules/chart/style.css);
+@import url('//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css');
+
+.container {
+  margin: 50px auto;
+}
+
+table {
+  font: 16px 'Fira Sans Extra Condensed', Arial, Helvetica, sans-serif;
+}
+
+table td,
+table thead {
+  text-align: center;
+}
+
+.result {
+  font-weight: bold;
+}
+
+.table-baseline th {
+  padding: 0;
+}
+
+.hide {
+  display: none;
+}
