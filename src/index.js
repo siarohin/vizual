@@ -33,7 +33,6 @@ function rsschool() {
           if (ifCorrect !== 'Correct' || Number(points) > 150) points = 150;
           user[id] = user[id] || [];
           user[id].push({ points, solution: solution.replace(/"/g, '') });
-          // user[id].push(solution);
         }
       }
 
@@ -85,7 +84,7 @@ function rsschool() {
       rsschoolDemo();
 
       setTimeout(() => {
-        chart(user);
+        chart(user, title);
       }, 10000);
     });
 }
@@ -195,13 +194,12 @@ setTimeout(() => {
 
 
 // chart
-function chart(user) {
+function chart(user, title) {
   const ctx = document.querySelector('#chart').getContext('2d');
   const chartConfig = {
     type: 'line',
     data: {
-      labels: ['Matching Game', 'Matching Game II', 'Classy', 'Articles Everywhere', 'Anchor', 'Signing Up', 'Linear',
-        'Envious Heirs', 'Mariana', 'Tech Stack'],
+      labels: [...title],
       datasets: [],
     },
     options: {
@@ -219,6 +217,7 @@ function chart(user) {
     },
   };
 
+  // eslint-disable-next-line no-shadow
   const chart = new Chart(ctx, chartConfig);
   const colorSet = new Set();
   let color;
@@ -275,25 +274,33 @@ function chart(user) {
 
   const tableBody = document.querySelector('tbody');
   tableBody.onclick = (event) => {
+    event.preventDefault();
     const elementNavigation = event.target;
     if (elementNavigation.tagName === 'LABEL') {
       const name = user[elementNavigation.id][11];
+      const input = document.getElementById(elementNavigation.id);
 
-      const inputId = (elementNavigation.id) + 1;
-      const input = document.getElementById(inputId);
-
-
-      const dataSet = [user[elementNavigation.id][0].points, user[elementNavigation.id][1].points, user[elementNavigation.id][2].points,
-        user[elementNavigation.id][3].points, user[elementNavigation.id][4].points, user[elementNavigation.id][5].points,
-        user[elementNavigation.id][6].points, user[elementNavigation.id][7].points, user[elementNavigation.id][8].points,
+      const dataSet = [user[elementNavigation.id][0].points, user[elementNavigation.id][1].points,
+        user[elementNavigation.id][2].points, user[elementNavigation.id][3].points,
+        user[elementNavigation.id][4].points, user[elementNavigation.id][5].points,
+        user[elementNavigation.id][6].points, user[elementNavigation.id][7].points,
+        user[elementNavigation.id][8].points,
         user[elementNavigation.id][9].points];
 
-      if (input.hasAttribute('data-set', 'active')) {
+      if (document.querySelectorAll('.setactive').length < 10) {
+        if (input.hasAttribute('data-set', 'active')) {
+          input.removeAttribute('data-set', 'active');
+          input.classList.remove('setactive');
+          removeUserFromChart(chartConfig, name, dataSet);
+        } else {
+          input.setAttribute('data-set', 'active');
+          input.classList.add('setactive');
+          addUserToChart(chartConfig, name, dataSet);
+        }
+      } else if (input.hasAttribute('data-set', 'active')) {
         input.removeAttribute('data-set', 'active');
+        input.classList.remove('setactive');
         removeUserFromChart(chartConfig, name, dataSet);
-      } else {
-        input.setAttribute('data-set', 'active');
-        addUserToChart(chartConfig, name, dataSet);
       }
     }
   };
